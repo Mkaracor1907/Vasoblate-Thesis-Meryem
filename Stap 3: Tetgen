@@ -1,12 +1,10 @@
-%% stap2_tetgen_pig197_v8.m
-% Geen centering - ITK-Snap coordinaten zijn al aligned
-% Dit is de correcte aanpak
+
+% Geen centering - ITK-Snap coordinaten zijn al aligned - Stap 1
 
 clear; clc; close all;
 
 folder = 'D:\Meryem Thesis\STL_files';
 
-%% 1. Inladen - GEEN centering, originele coordinaten gebruiken
 disp('[1/5] Inladen (originele coordinaten)...');
 lumenSTL    = import_STL(fullfile(folder, 'tmp_lumen.stl'));
 wallSTL     = import_STL(fullfile(folder, 'tmp_wall_outer.stl'));
@@ -20,10 +18,6 @@ F_pan = pancreasSTL.solidFaces{1};  V_pan = pancreasSTL.solidVertices{1};
 [F_wal, V_wal] = mergeVertices(F_wal, V_wal);
 [F_pan, V_pan] = mergeVertices(F_pan, V_pan);
 
-fprintf('    Lumen centroid:    [%.1f %.1f %.1f]\n', mean(V_lum));
-fprintf('    Wall centroid:     [%.1f %.1f %.1f]\n', mean(V_wal));
-fprintf('    Pancreas centroid: [%.1f %.1f %.1f]\n', mean(V_pan));
-disp('    OK');
 
 %% 2. Subtri + remesh zonder te centreren
 disp('[2/5] Subtri verfijnen en remeshen...');
@@ -41,7 +35,7 @@ opt.pointSpacing = 0.9;
 [F3, V3] = ggremesh(F_pan, V_pan, opt);  % pancreas
 disp('    OK');
 
-%% 3. Region points exact zoals Kristie
+%% 3. Region points
 disp('[3/5] Region points...');
 [V_region1] = getInnerPoint({F1,F2},{V1,V2});  % wall
 [V_region2] = getInnerPoint(F2,V2);             % lumen
